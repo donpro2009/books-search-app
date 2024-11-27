@@ -3,11 +3,11 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "./redux/store";
-import { setBooks } from "./redux/slices/bookSlice";
+import { setBooks, setLoading } from "./redux/slices/bookSlice";
 import SearchBar from "./components/SearchBar";
 import ResultsTable from "./components/ResultsTable";
 import axios from "axios";
-import { Layout, Typography } from "antd";
+import { Layout, Spin, Typography } from "antd";
 
 // Destructure Layout and Typography components
 const { Header, Content } = Layout;
@@ -17,9 +17,11 @@ const Home: React.FC = () => {
   // State Manangement
   const dispatch = useDispatch();
   const books = useSelector((state: RootState) => state.books.books);
+  const loading = useSelector((state: RootState) => state.books.loading);
 
   // Call OpenLibrary API and save its data in results
   const handleSearch = async (query: string) => {
+    dispatch(setLoading(true)); // Set the loading state to true while searching
     try {
       const response = await axios.get(
         `http://openlibrary.org/search.json?q=${query}`
@@ -27,6 +29,8 @@ const Home: React.FC = () => {
       dispatch(setBooks(response.data.docs));
     } catch (error) {
       console.error("Error fetching data:", error);
+    } finally {
+      dispatch(setLoading(false)); // Set the loading state to false when the search finishes
     }
   };
 
@@ -43,7 +47,8 @@ const Home: React.FC = () => {
       </Header>
       <Content>
         <SearchBar onSearch={handleSearch} />
-        <ResultsTable results={books} />
+        {/* Display a spinner while loading = true */}
+        {loading ? <Spin size="large" /> : <ResultsTable results={books} />}
       </Content>
     </Layout>
   );

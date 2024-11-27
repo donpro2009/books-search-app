@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-interface Book {
+export interface Book {
   key?: string;
   id?: string;
   title: string;
@@ -10,10 +10,12 @@ interface Book {
 
 interface BookState {
   books: Book[];
+  loading: boolean;
 }
 
 const initialState: BookState = {
   books: [],
+  loading: false, // Initail loading state
 };
 
 const bookSlice = createSlice({
@@ -23,8 +25,11 @@ const bookSlice = createSlice({
     setBooks(state, action: PayloadAction<Book[]>) {
       state.books = action.payload;
     },
+    setLoading(state, action: PayloadAction<boolean>) {
+      state.loading = action.payload;
+    },
   },
 });
 
-export const { setBooks } = bookSlice.actions;
+export const { setBooks, setLoading } = bookSlice.actions;
 export default bookSlice.reducer;

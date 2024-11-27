@@ -26,6 +26,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
         size="large"
         value={query}
         onChange={(e) => setQuery(e.target.value)}
+        onPressEnter={handleSearch} // When the user presses Enter on the keyboard, call handleSearch
       />
       <Button type="primary" size="large" onClick={handleSearch}>
         Search

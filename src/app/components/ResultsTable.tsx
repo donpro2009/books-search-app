@@ -1,14 +1,6 @@
 import React from "react";
 import { Table } from "antd";
-
-// Book Interface
-interface Book {
-  key?: string;
-  id?: string;
-  title: string;
-  author_name: string[];
-  first_publish_year: number;
-}
+import { Book } from "../redux/slices/bookSlice";
 
 interface ResultsTableProps {
   results: Book[];
