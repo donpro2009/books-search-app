@@ -25,7 +25,7 @@ const columns = [
     title: "Author",
     dataIndex: "author_name",
     key: "author_name",
-    render: (authors: string[]) => authors.join(", "), // Create a comma-separated string from all the authors
+    render: (authors?: string[]) => (authors ? authors?.join(", ") : "Unknown"), // Create a comma-separated string from all the authors
   },
   {
     title: "First Publish Year",
