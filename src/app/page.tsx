@@ -6,9 +6,11 @@ import ResultsTable from "./components/ResultsTable";
 import axios from "axios";
 import { Layout, Typography } from "antd";
 
+// Destructure Layout and Typography components
 const { Header, Content } = Layout;
 const { Title } = Typography;
 
+// Book Interface
 interface Book {
   key?: string;
   id?: string;
@@ -18,8 +20,10 @@ interface Book {
 }
 
 const Home: React.FC = () => {
+  // State Manangement
   const [results, setResults] = useState<Book[]>([]);
 
+  // Call OpenLibrary API and save its data in results
   const handleSearch = async (query: string) => {
     try {
       const response = await axios.get(
