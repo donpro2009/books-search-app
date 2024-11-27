@@ -1,5 +1,4 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { create } from "domain";
 
 interface Book {
   key?: string;
@@ -27,5 +26,5 @@ const bookSlice = createSlice({
   },
 });
 
-export const {setBooks} = bookSlice.actions;
+export const { setBooks } = bookSlice.actions;
 export default bookSlice.reducer;

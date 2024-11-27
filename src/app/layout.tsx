@@ -1,9 +1,9 @@
-import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
+import { Metadata } from "next";
 
 // Provider
-import { Provider } from "react-redux";
+import ClientProvider from "./components/private/ClientProvider";
 
 // Store
 import store from "./redux/store";
@@ -30,12 +30,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <Provider store={store}>
+    <ClientProvider>
       <html lang="en">
         <body className={`${geistSans.variable} ${geistMono.variable}`}>
           {children}
         </body>
       </html>
-    </Provider>
+    </ClientProvider>
   );
 }
