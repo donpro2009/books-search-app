@@ -5,9 +5,6 @@ import { Metadata } from "next";
 // Provider
 import ClientProvider from "./components/private/ClientProvider";
 
-// Store
-import store from "./redux/store";
-
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
   variable: "--font-geist-sans",

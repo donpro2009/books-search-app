@@ -1,6 +1,9 @@
 import React from "react";
 import { Table } from "antd";
-import { Book } from "../redux/slices/bookSlice";
+import { Book, setSelectedBook } from "../redux/slices/bookSlice";
+import { useRouter } from "next/navigation";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../redux/store";
 
 interface ResultsTableProps {
   results: Book[];
@@ -29,14 +32,26 @@ const columns = [
 // Functional Component that takes ResultTableProps as its props
 // results is extracted from props
 const ResultsTable: React.FC<ResultsTableProps> = ({ results }) => {
+  const router = useRouter();
+  const dispatch = useDispatch<AppDispatch>();
+
+  const handleRowClick = (record: Book) => {
+    const bookId = record.key?.replace("/works", "") || record.id;
+    dispatch(setSelectedBook(record));
+    router.push(`/books/${bookId}`);
+  };
+
   return (
     <Table
       columns={columns}
       dataSource={results}
       rowKey={
-        (record) => record.key || `${record.title}-${record.first_publish_year}` // Set the record to a string by concatenating title and publish year
+        (record) => record.key || `${record.id}-${record.title}` // Set the record to a string by concatenating title and publish year
       }
       pagination={{ pageSize: 10 }} //TODO: Allow changing pageSize
+      onRow={(record) => ({
+        onClick: () => handleRowClick(record),
+      })}
     />
   );
 };
