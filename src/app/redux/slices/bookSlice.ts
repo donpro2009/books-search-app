@@ -13,18 +13,21 @@ export interface Book {
         type: string;
         value: string;
       };
+  cover_i?: number;
 }
 
 interface BookState {
   books: Book[];
   loading: boolean;
   selectedBook: Book | null;
+  coverImageUrl: string | undefined;
 }
 
 const initialState: BookState = {
   books: [],
   loading: false, // Initail loading state
   selectedBook: null, // No book selected initially
+  coverImageUrl: undefined, // No image by default
 };
 
 // Async thunk for searching for books
@@ -32,7 +35,7 @@ export const searchBooks = createAsyncThunk(
   "books/searchBooks",
   async (q: string) => {
     const response = await axios.get(
-      `http://openlibrary.org/search.json?q=${q}`
+      `https://openlibrary.org/search.json?q=${q}`
     );
     return response.data.docs;
   }
@@ -42,9 +45,25 @@ export const searchBooks = createAsyncThunk(
 export const fetchBookDetails = createAsyncThunk(
   "books/fetchBookDetails",
   async (id: string) => {
-    const response = await axios.get(`http://openlibrary.org/works/${id}.json`);
-
+    const response = await axios.get(
+      `https://openlibrary.org/works/${id}.json`
+    );
     return response.data;
+  }
+);
+
+// Async thunk for fetching book cover
+export const fetchBookCover = createAsyncThunk(
+  "books/fetchBookCover",
+  async (coverId: number) => {
+    const response = await axios.get(
+      `https://covers.openlibrary.org/b/id/${coverId}-L.jpg`,
+      {
+        responseType: "arraybuffer",
+      }
+    );
+    const base64 = Buffer.from(response.data, "binary").toString("base64");
+    return `data:image/jpeg;base64,${base64}`;
   }
 );
 
@@ -60,6 +79,9 @@ const bookSlice = createSlice({
     },
     setSelectedBook(state, action: PayloadAction<Book | null>) {
       state.selectedBook = action.payload;
+    },
+    setCoverImageUrl(state, action: PayloadAction<string | undefined>) {
+      state.coverImageUrl = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -90,9 +112,20 @@ const bookSlice = createSlice({
       .addCase(fetchBookDetails.rejected, (state) => {
         state.loading = false;
         state.selectedBook = null;
+      })
+      .addCase(fetchBookCover.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(fetchBookCover.fulfilled, (state, action) => {
+        state.coverImageUrl = action.payload;
+      })
+      .addCase(fetchBookCover.rejected, (state) => {
+        state.loading = false;
+        state.coverImageUrl = undefined;
       });
   },
 });
 
-export const { setBooks, setLoading, setSelectedBook } = bookSlice.actions;
+export const { setBooks, setLoading, setSelectedBook, setCoverImageUrl } =
+  bookSlice.actions;
 export default bookSlice.reducer;
