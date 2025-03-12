@@ -3,8 +3,8 @@
 import React, { useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState, AppDispatch } from "../../redux/store";
-import { fetchBookDetails, fetchBookCover } from "../../redux/slices/bookSlice";
+import { RootState, AppDispatch } from "../../../redux/store";
+import { fetchBookDetails, fetchBookCover } from "../../../redux/slices/bookSlice";
 import { Layout, Typography, Spin, Button, Card } from "antd";
 import Image from "next/image";
 

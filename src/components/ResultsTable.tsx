@@ -1,9 +1,9 @@
 import React from "react";
 import { Table } from "antd";
-import { Book, setSelectedBook } from "../redux/slices/bookSlice";
+import { Book, setSelectedBook } from "../app/redux/slices/bookSlice";
 import { useRouter } from "next/navigation";
 import { useDispatch } from "react-redux";
-import { AppDispatch } from "../redux/store";
+import { AppDispatch } from "../app/redux/store";
 
 interface ResultsTableProps {
   results: Book[];

@@ -2,10 +2,10 @@
 
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "./redux/store";
+import { AppDispatch, RootState } from "@/app/redux/store";
 import { searchBooks } from "./redux/slices/bookSlice";
-import SearchBar from "./components/SearchBar";
-import ResultsTable from "./components/ResultsTable";
+import SearchBar from "../components/SearchBar";
+import ResultsTable from "../components/ResultsTable";
 import { Layout, Spin, Typography } from "antd";
 
 // Destructure Layout and Typography components
@@ -14,7 +14,7 @@ const { Title } = Typography;
 
 const Home: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
-  // State Manangement
+  // State Management
   const books = useSelector((state: RootState) => state.books.books);
   const loading = useSelector((state: RootState) => state.books.loading);
 
