@@ -25,9 +25,9 @@ interface BookState {
 
 const initialState: BookState = {
   books: [],
-  loading: false, // Initail loading state
-  selectedBook: null, // No book selected initially
-  coverImageUrl: undefined, // No image by default
+  loading: false, //Initial loading state
+  selectedBook: null, //No book selected initially
+  coverImageUrl: undefined, //No image by default
 };
 
 // Async thunk for searching for books
