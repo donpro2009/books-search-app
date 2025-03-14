@@ -1,11 +1,10 @@
-import React from "react";
-import { Table, Typography } from "antd";
-import { setSelectedBook } from "../app/redux/slices/bookSlice";
 import { Book } from "@/app/types/books";
+import { Table, Typography } from "antd";
 import { useRouter } from "next/navigation";
-import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "../app/redux/store";
-import Loader from './Loader';
+import React from "react";
+import { useDispatch } from "react-redux";
+import { setSelectedBook } from "../app/redux/slices/bookSlice";
+import { AppDispatch } from "../app/redux/store";
 
 interface ResultsTableProps {
   results: Book[];
@@ -38,13 +37,9 @@ const { Title } = Typography;
 const ResultsTable: React.FC<ResultsTableProps> = ({ results }) => {
   const router = useRouter();
   const dispatch = useDispatch<AppDispatch>();
-  const loading = useSelector((state: RootState) => state.books.loading);
 
   const handleRowClick = (record: Book) => {
     const bookId = record.key?.replace("/works", "") || record.id;
-    if (loading) {
-      return <Loader />
-    }
     dispatch(setSelectedBook(record));
     router.push(`/books/${bookId}`);
   };
