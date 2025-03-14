@@ -1,20 +1,21 @@
+import { Book } from '@/app/types/books';
 import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-export interface Book {
-  key?: string;
-  id?: string;
-  title: string;
-  author_name?: string[];
-  first_publish_year?: number;
-  description?:
-    | string
-    | {
-        type: string;
-        value: string;
-      };
-  cover_i?: number;
-}
+// export interface Book {
+//   key?: string;
+//   id?: string;
+//   title: string;
+//   author_name?: string[];
+//   first_publish_year?: number;
+//   description?:
+//   | string
+//   | {
+//     type: string;
+//     value: string;
+//   };
+//   cover_i?: number;
+// }
 
 interface BookState {
   books: Book[];
@@ -34,9 +35,11 @@ const initialState: BookState = {
 export const searchBooks = createAsyncThunk(
   "books/searchBooks",
   async (q: string) => {
+    setLoading(true);
     const response = await axios.get(
       `https://openlibrary.org/search.json?q=${q}`
     );
+    setLoading(false);
     return response.data.docs;
   }
 );

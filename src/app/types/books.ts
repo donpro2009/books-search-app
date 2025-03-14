@@ -20,10 +20,11 @@ export interface Book {
     ia?: string[];
     ia_collection_s?: string;
     key: string;
+    id: string;
     language?: string[];
     lending_edition_s?: string;
     lending_identifier_s?: string;
     public_scan_b: boolean;
     title: string;
-    subtitle?: string;
+    subtitle?: string;    
 }
