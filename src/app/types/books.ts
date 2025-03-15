@@ -26,5 +26,6 @@ export interface Book {
     lending_identifier_s?: string;
     public_scan_b: boolean;
     title: string;
-    subtitle?: string;    
+    subtitle?: string;  
+    description?: string;
 }

@@ -26,14 +26,13 @@ interface BookState {
 
 const initialState: BookState = {
   books: [],
-  loading: false, //Initial loading state
-  selectedBook: null, //No book selected initially
-  coverImageUrl: undefined, //No image by default
+  loading: false,
+  selectedBook: null,
+  coverImageUrl: undefined,
 };
 
-// Async thunk for searching for books
-export const searchBooks = createAsyncThunk(
-  "books/searchBooks",
+export const getBooks = createAsyncThunk(
+  "books/getBooks",
   async (q: string) => {
     setLoading(true);
     const response = await axios.get(
@@ -44,9 +43,8 @@ export const searchBooks = createAsyncThunk(
   }
 );
 
-// Async thunk for fetching book details
-export const fetchBookDetails = createAsyncThunk(
-  "books/fetchBookDetails",
+export const getBookDetails = createAsyncThunk(
+  "books/getBookDetails",
   async (id: string) => {
     const response = await axios.get(
       `https://openlibrary.org/works/${id}.json`
@@ -55,9 +53,8 @@ export const fetchBookDetails = createAsyncThunk(
   }
 );
 
-// Async thunk for fetching book cover
-export const fetchBookCover = createAsyncThunk(
-  "books/fetchBookCover",
+export const getBookCover = createAsyncThunk(
+  "books/getBookCover",
   async (coverId: number) => {
     const response = await axios.get(
       `https://covers.openlibrary.org/b/id/${coverId}-L.jpg`,
@@ -89,40 +86,40 @@ const bookSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(searchBooks.pending, (state) => {
+      .addCase(getBooks.pending, (state) => {
         state.loading = true;
       })
       .addCase(
-        searchBooks.fulfilled,
+        getBooks.fulfilled,
         (state, action: PayloadAction<Book[]>) => {
           state.loading = false;
           state.books = action.payload;
         }
       )
-      .addCase(searchBooks.rejected, (state) => {
+      .addCase(getBooks.rejected, (state) => {
         state.loading = false;
       })
-      .addCase(fetchBookDetails.pending, (state) => {
+      .addCase(getBookDetails.pending, (state) => {
         state.loading = true;
       })
       .addCase(
-        fetchBookDetails.fulfilled,
+        getBookDetails.fulfilled,
         (state, action: PayloadAction<Book>) => {
           state.loading = false;
           state.selectedBook = action.payload;
         }
       )
-      .addCase(fetchBookDetails.rejected, (state) => {
+      .addCase(getBookDetails.rejected, (state) => {
         state.loading = false;
         state.selectedBook = null;
       })
-      .addCase(fetchBookCover.pending, (state) => {
+      .addCase(getBookCover.pending, (state) => {
         state.loading = true;
       })
-      .addCase(fetchBookCover.fulfilled, (state, action) => {
+      .addCase(getBookCover.fulfilled, (state, action) => {
         state.coverImageUrl = action.payload;
       })
-      .addCase(fetchBookCover.rejected, (state) => {
+      .addCase(getBookCover.rejected, (state) => {
         state.loading = false;
         state.coverImageUrl = undefined;
       });

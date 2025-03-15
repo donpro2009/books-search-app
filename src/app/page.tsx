@@ -2,15 +2,15 @@
 
 import { AppDispatch, RootState } from "@/app/redux/store";
 import Loader from "@/components/Loader";
-import { Layout, Typography } from "antd";
+import MainHeader from "@/components/shared/MainHeader";
+import { Layout } from "antd";
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import ResultsTable from "../components/ResultsTable";
 import SearchBar from "../components/SearchBar";
-import { searchBooks } from "./redux/slices/bookSlice";
+import { getBooks } from "./redux/slices/bookSlice";
 
-const { Header, Content } = Layout;
-const { Title } = Typography;
+const { Content } = Layout;
 
 const Home: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -19,7 +19,7 @@ const Home: React.FC = () => {
 
   const handleSearch = async (query: string) => {
     if (query.trim()) {
-      dispatch(searchBooks(query));
+      dispatch(getBooks(query));
     }
   };
 
@@ -32,17 +32,7 @@ const Home: React.FC = () => {
         gap: "10px",
       }}
     >
-      <Header
-        style={{
-          backgroundColor: "#fff",
-          display: "flex",
-          alignItems: "center",
-          verticalAlign: "middle",
-          borderRadius: "10px",
-        }}
-      >
-        <Title level={2}>OpenLibrary Book Search Application</Title>
-      </Header>
+      <MainHeader />
       <Content>
         <SearchBar onSearch={handleSearch} />
         <br />

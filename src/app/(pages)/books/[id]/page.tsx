@@ -4,7 +4,7 @@ import React, { useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState, AppDispatch } from "../../../redux/store";
-import { fetchBookDetails, fetchBookCover } from "../../../redux/slices/bookSlice";
+import { getBookDetails, getBookCover } from "../../../redux/slices/bookSlice";
 import { Layout, Typography, Spin, Button, Card } from "antd";
 import Image from "next/image";
 
@@ -27,14 +27,14 @@ const BookDetailsPage: React.FC = () => {
   // Get book details
   useEffect(() => {
     if (id && typeof id === "string") {
-      dispatch(fetchBookDetails(id));
+      dispatch(getBookDetails(id));
     }
   }, [id, dispatch]);
 
   // Get book cover
   useEffect(() => {
     if (selectedBook && selectedBook.cover_i && !coverImageUrl) {
-      dispatch(fetchBookCover(selectedBook.cover_i));
+      dispatch(getBookCover(selectedBook.cover_i));
     }
   }, [selectedBook, coverImageUrl, dispatch]);
 
@@ -130,7 +130,7 @@ const BookDetailsPage: React.FC = () => {
           <Text>
             {typeof selectedBook.description === "string"
               ? selectedBook.description
-              : selectedBook.description?.value || "No description available"}
+              : "No description available"}
           </Text>
         </Card>
       </Content>

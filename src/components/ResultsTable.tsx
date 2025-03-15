@@ -1,7 +1,7 @@
 import { Book } from "@/app/types/books";
 import { Table, Typography } from "antd";
 import { useRouter } from "next/navigation";
-import React from "react";
+import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { setSelectedBook } from "../app/redux/slices/bookSlice";
 import { AppDispatch } from "../app/redux/store";
@@ -10,7 +10,6 @@ interface ResultsTableProps {
   results: Book[];
 }
 
-// Columns to display in table
 const columns = [
   {
     title: "Title",
@@ -21,7 +20,7 @@ const columns = [
     title: "Author",
     dataIndex: "author_name",
     key: "author_name",
-    render: (authors?: string[]) => (authors ? authors?.join(", ") : "Unknown"), // Create a comma-separated string from all the authors
+    render: (authors?: string[]) => (authors ? authors?.join(", ") : "Unknown"),
   },
   {
     title: "First Publish Year",
@@ -32,11 +31,13 @@ const columns = [
 
 const { Title } = Typography;
 
-// Functional Component that takes ResultTableProps as its props
-// results is extracted from props
 const ResultsTable: React.FC<ResultsTableProps> = ({ results }) => {
   const router = useRouter();
   const dispatch = useDispatch<AppDispatch>();
+
+  const numberOfResults: number = results.length;
+
+  const [pageSize, setPageSize] = useState<number>(10);
 
   const handleRowClick = (record: Book) => {
     const bookId = record.key?.replace("/works", "") || record.id;
@@ -46,15 +47,21 @@ const ResultsTable: React.FC<ResultsTableProps> = ({ results }) => {
 
   return (
     <>
-      <Title level={3}>Found {results.length} books</Title>
+      <Title level={3}>
+        {numberOfResults === 0
+          ? "No books found"
+          : `Found ${numberOfResults} books`}
+      </Title>
+
       <Table
         style={{ borderRadius: "10px" }}
         columns={columns}
         dataSource={results}
-        rowKey={
-          (record) => record.key || `${record.id}-${record.title}` // Set the record to a string by concatenating title and publish year
-        }
-        pagination={{ pageSize: 10 }} //TODO: Allow changing pageSize
+        rowKey={(record) => record.key || `${record.id}-${record.title}`}
+        pagination={{
+          pageSize: pageSize,
+          onShowSizeChange: (_, size) => setPageSize(size),
+        }}
         onRow={(record) => ({
           onClick: () => handleRowClick(record),
         })}
